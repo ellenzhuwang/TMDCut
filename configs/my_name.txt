@@ -1,0 +1,4 @@
+ground
+sea
+cow
+stone
