@@ -12,6 +12,11 @@ pip install -r requirements.txt
 ## Datasets
 We follow the [MMSeg data preparation document](https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md) to download and pre-process the datasets. 
 
+## Demo
+
+```
+python demo.py
+```
 ## Open-vocabulary semantic segmentation evaluation
 Please modify the settings in `configs/base_config.py` before running the evaluation.
 
