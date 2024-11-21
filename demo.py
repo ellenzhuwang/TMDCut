@@ -1,14 +1,13 @@
 from PIL import Image
 import matplotlib.pyplot as plt
 from torchvision import transforms
-from proxyclip_segmentor import ProxyCLIPSegmentation
+from TMDCut import TMDCut_Segmentation
 
 import seaborn as sns
 from matplotlib.colors import ListedColormap
 import numpy as np
 
-#img = Image.open('/home/ellen/tokencut_tmd/DiffCut/assets/coco.jpg')
-img = Image.open('/home/ellen/tokencut_tmd/diffused_cut/voc2017val/2007_000464.jpg')
+img = Image.open('./voc2017val/2007_000464.jpg')
 name_list = ['ground', 'sea','cow','stone']
 
 with open('./configs/my_name.txt', 'w') as writers:
@@ -27,21 +26,12 @@ img_tensor = transforms.Compose([
 img_tensor = img_tensor.unsqueeze(0).to('cuda')
 
 
-model = ProxyCLIPSegmentation(clip_type='openai', model_type='ViT-L-14', vfm_model='dino',
+model = TMDCut_Segmentation(clip_type='openai', model_type='ViT-B-16', vfm_model='dino',
                               name_path='./configs/my_name.txt')
 
 seg_pred = model.predict(img_tensor, data_samples=None)
-#print(seg_pred)
 seg_pred = seg_pred.data.cpu().numpy().squeeze(0)
 
-# #fig, ax = plt.subplots(1, 2, figsize=(12, 6))
-# #ax[0].imshow(img)
-# #ax[0].axis('off')
-# plt.imshow(seg_pred, cmap='viridis')
-# plt.axis('off')
-# plt.tight_layout()
-# # plt.show()
-# plt.savefig('images/seg_coco_our.png', bbox_inches='tight')
 colors = sns.hls_palette(len(np.unique(seg_pred)), h=0.9)
 cmap = ListedColormap(colors)
 
@@ -49,6 +39,5 @@ plt.imshow(img)
 plt.imshow(seg_pred, cmap=cmap, alpha=0.8)
 plt.axis('off')
 plt.tight_layout()
-# plt.show()
-plt.savefig('images/seg_voc1.png', bbox_inches='tight')
+plt.savefig('seg_voc.png', bbox_inches='tight')
 
